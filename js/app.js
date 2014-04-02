@@ -14,14 +14,15 @@ $(document).ready(function(){
 
 
 	*/
+	var gameStillOn = new Boolean(0);
+	var randomNumber = Math.floor((Math.random()*100)+1);
+	var numGuesses = 0;
 	do {
 		$("#guessButton").click(function(){
-			var randomNumber = Math.floor((Math.random()*100)+1);
 			var inputString = $("#userGuess").val();
 			var inputNumber = parseInt(inputString);
-			var numGuesses = 0;
 			var isItDecimal = inputString.indexOf(".");
-			var gameStillOn = new Boolean(1);
+		
 
 			
 				/*Increment the number of guesses*/
@@ -33,7 +34,7 @@ $(document).ready(function(){
 				/* generate a random number*/
 
 
-		} while gameStillOn;
+	} while gameStillOn;
 
 	});
 	/*--- Display information modal box ---*/
