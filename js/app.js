@@ -1,19 +1,39 @@
 
 $(document).ready(function(){
+	/* there are two states that the game can be in:
 
-	$("#guessButton").click(function(){
-		/*Get the user input */
-		var inputString = $("#userGuess").val();
-		var inputNumber = parseInt(inputString);
-		var numGuesses = 0;
-		var isItDecimal = inputString.indexOf(".");
+	1 - A game is underway
+		-the code is in a loop that gets the next guess and determines whether the guess is:
+		hot - within 10 numbers of the random number
+		hotter - within 10 numbers, closer to the number and on the same side of the number than the last guess.
+		warm - the guess is within 25 of the number
+		warmer - closer than warm on the same side of the number
+	2 - A game is not underway
+	
 
-		validateNumber(isItDecimal, inputNumber);
 
-		/* generate a random number*/
-		var randomNumber = Math.floor((Math.random()*100)+1);
 
-		/* get the users input and make sure it is in the range of possible numbers*/
+	*/
+	do {
+		$("#guessButton").click(function(){
+			var randomNumber = Math.floor((Math.random()*100)+1);
+			var inputString = $("#userGuess").val();
+			var inputNumber = parseInt(inputString);
+			var numGuesses = 0;
+			var isItDecimal = inputString.indexOf(".");
+			var gameStillOn = new Boolean(1);
+
+			
+				/*Increment the number of guesses*/
+				numGuesses=+1;
+
+				/* make sure the guess is in the range of possible numbers*/
+				validateNumber(isItDecimal, inputNumber);
+
+				/* generate a random number*/
+
+
+		} while gameStillOn;
 
 	});
 	/*--- Display information modal box ---*/
@@ -43,7 +63,7 @@ $(document).ready(function(){
 		}else{
 			invalidInput();
 		}
-
+		/* will I need something here to reset variables i the number inst valid?*/
   	};
 
   	function invalidInput(){
