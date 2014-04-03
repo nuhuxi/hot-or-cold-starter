@@ -1,46 +1,18 @@
 
 $(document).ready(function(){
-	/* there are two states that the game can be in:
 
-	1 - A game is underway
-		-the code is in a loop that gets the next guess and determines whether the guess is:
-		hot - within 10 numbers of the random number
-		hotter - within 10 numbers, closer to the number and on the same side of the number than the last guess.
-		warm - the guess is within 25 of the number
-		warmer - closer than warm on the same side of the number
-	2 - A game is not underway
-	
-
-
-
-	*/
-	var gameStillOn = new Boolean(0);
-	var randomNumber = Math.floor((Math.random()*100)+1);
+	var randomNumber = '';
 	var numGuesses = 0;
-	do {
-		$("#guessButton").click(function(){
-			var inputString = $("#userGuess").val();
-			var inputNumber = parseInt(inputString);
-			var isItDecimal = inputString.indexOf(".");
-		
+	var inputString;
+	var theGuess;
+	var isItDecimal;
+	var lastNumberGuessed;
 
-			
-				/*Increment the number of guesses*/
-				numGuesses=+1;
+	resetGame();
 
-				/* make sure the guess is in the range of possible numbers*/
-				validateNumber(isItDecimal, inputNumber);
-
-				/* generate a random number*/
-
-
-	} while gameStillOn;
-
-	});
 	/*--- Display information modal box ---*/
   	$(".what").click(function(){
     	$(".overlay").fadeIn(1000);
-
   	});
 
   	/*--- Hide information modal box ---*/
@@ -48,30 +20,84 @@ $(document).ready(function(){
   		$(".overlay").fadeOut(1000);
   	});
 
+  	/*--- User makes a guess ---*/
+	$("#guessButton").click(function(event){
+		event.preventDefault();
+		numGuesses++;
+		$('#count').text(numGuesses);
+		inputString = $('#userGuess').val();
+		isItDecimal = inputString.indexOf('.');
+		theGuess = parseInt(inputString);
+
+		$('form')[0].reset();
+		validateNumber(isItDecimal, theGuess);
+		$('#guessList').append("<li>" + theGuess + "</li>");
+		isTheGuessRight();
+	});
+
+	/*--- User wants a new game. ---*/
+	$('.new').click(resetGame);
+
+	/*--- FUNCTIONS ---*/
+  	function resetGame(){
+  		/*--- Reset the variables --*/
+		randomNumber = '';
+		numGuesses = 0;
+		inputString;
+
+		/*--- Reset the DOM ---*/
+		$('#count').text(numGuesses);
+		$("#guessList").find("li").remove();
+
+		/*---Generate a new random number ---*/
+		randomNumber = Math.floor((Math.random()*100)+1)
+		console.log('The random number is '+ randomNumber);
+	};
+
   	function validateNumber(isItDecimal,inputNumber){
   		if (isItDecimal==-1) {
 			if(!isNaN(inputNumber) && inputNumber!==''){
-					if(inputNumber > 0 && inputNumber < 100){
-						console.log('Good number!,' + 'inputNumber=' + inputNumber);
+					if(inputNumber > 0 && inputNumber < 101){
 					} else{
 						invalidInput();
 					}
-			}
-			else{
-				console.log(isNaN(inputNumber));
+			}else{
+				console.log(inputNumber, isNaN(inputNumber));
 				invalidInput();
 			}
 		}else{
 			invalidInput();
 		}
-		/* will I need something here to reset variables i the number inst valid?*/
   	};
 
   	function invalidInput(){
-  		alert("Enter a number between 0 and 99 - Decimal point is not allowed!");
+  		alert("Enter a number between 1 and 100 - Decimal point is not allowed!");
   	};
 
+  	function isTheGuessRight(){
+  		console.log('The guess is ' +theGuess);
+  		console.log('The last guess was '+lastNumberGuessed);s
+  		if(numGuesses===1){
+  			alert('Nice first guess');
+  		}
 
+
+  		if(theGuess===randomNumber){
+  			alert('You did it!!!!');
+  			resetGame();
+  		}else{
+  			if(theGuess<randomNumber && lastNumberGuessed>theGuess){
+  				console.log('You are getting warmer');
+  			}else if(randomNumber<theGuess && theGuess<lastNumberGuessed){
+  				  		console.log('You are getting warmer');
+  					}else{
+  						if (randomNumber<theGuess && randomNumber>lastNumberGuessed) {
+  						console.log('You are getting colder')
+  						}else{	
+  						  console.log('You are getting colder');
+  							}
+  					}
+  		};
 });
 
 
